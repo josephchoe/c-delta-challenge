@@ -20,7 +20,7 @@
               </td>
 
               <td>
-                <%= choice_fields.select :creative_quality_id, options_for_select(CreativeQuality.pluck(:name, :id)), { hide_label: hide_label }, { disabled: true } %>
+                <%= choice_fields.select :creative_quality_id, options_for_select(CreativeQuality.pluck(:name, :id), question_choice.creative_quality_id), { hide_label: hide_label }, { disabled: true } %>
               </td>
 
               <td>
