@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'rails', '~> 5.1.6'
-gem 'sqlite3'
+gem 'pg'
 
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap_form'
