@@ -29,6 +29,9 @@
                 <strong>
                   <%= question_choice.text %>
                 </strong>
+                <div class="<%= question_response.impact_class %>">
+                  <%= question_response.impact %>
+                </div>
               <% else %>
                 <span class="text-muted">
                   <%= question_choice.text %>
