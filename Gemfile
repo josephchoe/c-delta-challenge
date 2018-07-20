@@ -22,6 +22,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'factory_girl_rails'
   gem 'faker'
+  gem 'guard-rspec'
   gem 'pry-rails'
   gem 'rspec-rails'
 end
