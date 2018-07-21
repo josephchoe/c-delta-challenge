@@ -48,4 +48,60 @@ describe Response do
       end
     end
   end
+
+  context 'scores' do
+    let(:creative_quality) { create(:creative_quality) }
+    let(:question1) { create(:question) }
+    let!(:question1_choice1) { create(:question_choice, question: question1, creative_quality: creative_quality, score: 1) }
+    let!(:question1_choice2) { create(:question_choice, question: question1, creative_quality: creative_quality, score: -1) }
+    let!(:question1_choice3) { create(:question_choice, question: question1, creative_quality: creative_quality, score: 4) }
+    let(:question2) { create(:question) }
+    let!(:question2_choice1) { create(:question_choice, question: question2, creative_quality: creative_quality, score: 1) }
+    let!(:question2_choice2) { create(:question_choice, question: question2, creative_quality: creative_quality, score: -1) }
+    let!(:question2_choice3) { create(:question_choice, question: question2, creative_quality: creative_quality, score: 4) }
+    let(:question3) { create(:question) }
+    let!(:question3_choice1) { create(:question_choice, question: question3, creative_quality: creative_quality, score: 1) }
+    let!(:question3_choice2) { create(:question_choice, question: question3, creative_quality: creative_quality, score: -1) }
+    let!(:question3_choice3) { create(:question_choice, question: question3, creative_quality: creative_quality, score: 4) }
+    let(:response) { create(:response) }
+
+    describe '#raw_score' do
+      it 'adds choice scores to total' do
+        create(:question_response, response: response, question_choice: question1_choice2)
+        create(:question_response, response: response, question_choice: question2_choice2)
+        create(:question_response, response: response, question_choice: question3_choice2)
+        expect(response.raw_score(creative_quality)).to eql -3
+      end
+
+      context 'when question is not answered' do
+        it 'is not added to raw_score' do
+          create(:question_response, response: response, question_choice: question1_choice2)
+          create(:question_response, response: response, question_choice: question2_choice2)
+          expect(response.raw_score(creative_quality)).to eql -2
+        end
+      end
+    end
+
+    describe '#max_score' do
+      it 'adds max scores to total' do
+        create(:question_response, response: response, question_choice: question1_choice2)
+        create(:question_response, response: response, question_choice: question2_choice2)
+        create(:question_response, response: response, question_choice: question3_choice2)
+        expect(response.max_score(creative_quality)).to eql 12
+      end
+
+      context 'when question is not answered' do
+        let(:question3) { create(:question) }
+        let!(:question3_choice1) { create(:question_choice, question: question3, creative_quality: creative_quality, score: 1) }
+        let!(:question3_choice2) { create(:question_choice, question: question3, creative_quality: creative_quality, score: -1) }
+        let!(:question3_choice3) { create(:question_choice, question: question3, creative_quality: creative_quality, score: 4) }
+
+        it 'is not added to max_score' do
+          create(:question_response, response: response, question_choice: question1_choice2)
+          create(:question_response, response: response, question_choice: question2_choice2)
+          expect(response.max_score(creative_quality)).to eql 8
+        end
+      end
+    end
+  end
 end
